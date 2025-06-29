@@ -1,0 +1,18 @@
+export default async function handler(req, res) {
+  const { number, message } = req.query;
+  const key = "64707b64";
+
+  if (!number || !message) {
+    return res.status(400).json({ error: "Missing number or message" });
+  }
+
+  const apiUrl = `https://hl-hadi.my.id/c/csms.php?key=${key}&number=${encodeURIComponent(number)}&message=${encodeURIComponent(message)}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    const text = await response.text();
+    res.status(200).send(text);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to send SMS", detail: err.message });
+  }
+}
