@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SMS Sender | SHADOW JOKER</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Segoe+UI&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 20px;
+    }
+
+    .cover-img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      border-bottom: 2px solid #0f0;
+      box-shadow: 0 4px 10px #0f0;
+    }
+
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      margin: 20px 0;
+      text-align: center;
+      color: #0f0;
+    }
+
+    form {
+      background: #1a1a1a;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #0f0;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    input, textarea {
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      background: #111;
+      border: 1px solid #333;
+      color: #fff;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    textarea {
+      resize: none;
+      height: 100px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #28a745;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background: #218838;
+    }
+
+    #result {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 500px) {
+      h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <img src="https://iili.io/F5fnkyx.md.jpg" alt="Cover" class="cover-img">
+
+  <h2>📩 SHADOW JOKER SMS</h2>
+
+  <form id="smsForm">
+    <input type="text" id="number" placeholder="Enter Phone Number" required>
+    <textarea id="message" placeholder="Enter your message..." required></textarea>
+    <button type="submit">🚀 Send SMS</button>
+  </form>
+
+  <p id="result"></p>
+
+  <script>
+    const form = document.getElementById('smsForm');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const number = document.getElementById('number').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      if (!number || !message) {
+        result.innerText = "⚠️ Please fill in all fields.";
+        return;
+      }
+
+      result.innerText = "⏳ Sending...";
+
+      try {
+        const res = await fetch(`/api/send?number=${encodeURIComponent(number)}&message=${encodeURIComponent(message)}`);
+        const text = await res.text();
+        result.innerText = "✅ Response: " + text;
+      } catch (err) {
+        result.innerText = "❌ Error: " + err.message;
+      }
+    });
+  </script>
+
+</body>
+</html>
